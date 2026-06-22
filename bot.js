@@ -27,4 +27,17 @@ client.on('messageCreate', async (message) => {
   }
 });
 
+client.on('messageUpdate', async (oldMessage, newMessage) => {
+  if (newMessage.author?.bot) return;
+  if (newMessage.channel.id !== WATCHED_CHANNEL_ID) return;
+
+  if (newMessage.content?.trim().toLowerCase() !== 'ok') {
+    try {
+      await newMessage.delete();
+    } catch (err) {
+      console.error('Failed to delete edited message:', err);
+    }
+  }
+});
+
 client.login(process.env.TOKEN);
